@@ -28,13 +28,14 @@ index.html
 4.	Website will open in your browser
 ________________________________________
 🎯 Future Updates (If you want you can update it)
-•	No Repeat Name Generator
-•	Favourite Name Save System
-•	Artist Logo Generator
-•	Instagram Username Availability Checker
-•	Download Generated Names
+
+- No Repeat Name Generator  
+- Favourite Name Save System  
+- Artist Logo Generator  
+- Instagram Username Availability Checker  
+- Download Generated Names  
 ________________________________________
-👨‍💻 Author
+## 👨‍💻 Author
 Developed by Nikhil Nirvan 🚀
 ________________________________________
 📄 License
