@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Artist Name Generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-black to-gray-900 min-h-screen text-white flex items-center justify-center">
+
+  <!-- MAIN PAGE -->
+  <div id="home" class="text-center space-y-6">
+    <h1 class="text-4xl font-bold">Welcome to Name Generator 🎤</h1>
+    <button onclick="goTo('optionA')" class="bg-purple-600 px-6 py-3 rounded-2xl">Random Generator</button>
+    <button onclick="goTo('optionB')" class="bg-pink-600 px-6 py-3 rounded-2xl">Generate From Your Name</button>
+  </div>
+
+  <!-- OPTION A -->
+  <div id="optionA" class="hidden text-center space-y-4">
+    <h2 class="text-2xl">Random Generator</h2>
+    <select id="typeA" class="text-black px-2 py-2 rounded">
+      <option value="Rapper">Rapper</option>
+      <option value="Singer">Singer</option>
+      <option value="Producer">Producer</option>
+      <option value="DJ">DJ</option>
+    </select>
+
+    <select id="genderA" class="text-black px-2 py-2 rounded">
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+    </select>
+
+    <br>
+    <button onclick="generateRandom()" class="bg-green-600 px-4 py-2 rounded">Generate</button>
+    <button onclick="goTo('home')" class="bg-red-600 px-4 py-2 rounded">Back</button>
+    <div id="resultA" class="mt-4"></div>
+  </div>
+
+  <!-- OPTION B -->
+  <div id="optionB" class="hidden text-center space-y-4">
+    <h2 class="text-2xl">Name Based Generator</h2>
+
+    <select id="typeB" class="text-black px-2 py-2 rounded">
+      <option value="Rapper">Rapper</option>
+      <option value="Singer">Singer</option>
+      <option value="Producer">Producer</option>
+      <option value="DJ">DJ</option>
+    </select>
+
+    <select id="genderB" class="text-black px-2 py-2 rounded">
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+    </select>
+
+    <select id="countryB" class="text-black px-2 py-2 rounded">
+      <option value="American">American Style</option>
+      <option value="UK">UK Style</option>
+      <option value="Indian">Indian / Desi Style</option>
+      <option value="Korean">Korean Style</option>
+      <option value="Latin">Latin Style</option>
+    </select>
+
+    <label class="block">
+      <input type="checkbox" id="coolFormatB"> Cool Name Format
+    </label>
+
+    <input id="realName" placeholder="Enter Your Name" class="text-black px-2 py-2 rounded" />
+    <p id="nameError" class="text-red-500 hidden">⚠ Please enter your name first</p>
+
+    <button onclick="generateFromName()" class="bg-green-600 px-4 py-2 rounded">Generate</button>
+    <button onclick="goTo('home')" class="bg-red-600 px-4 py-2 rounded">Back</button>
+
+    <div id="resultB" class="mt-4"></div>
+
+    <button onclick="generateTagB()" class="bg-blue-600 px-4 py-2 rounded">Generate Producer Tag</button>
+    <div id="tagB" class="mt-2"></div>
+  </div>
+
+<script>
+let lastGeneratedB = "";
+
+function goTo(page) {
+  document.getElementById('home').classList.add('hidden');
+  document.getElementById('optionA').classList.add('hidden');
+  document.getElementById('optionB').classList.add('hidden');
+  document.getElementById(page).classList.remove('hidden');
+}
+
+const prefixes = ["Lil", "MC", "DJ", "Young", "Big", "King", "Queen", "Prod", "The"];
+const suffixes = ["Beats", "Wave", "Flow", "Sound", "Vibe", "Rhythm", "Bass"];
+
+function generateRandom() {
+  let type = document.getElementById('typeA').value;
+  let name = prefixes[Math.floor(Math.random()*prefixes.length)] + " " +
+             suffixes[Math.floor(Math.random()*suffixes.length)];
+
+  document.getElementById('resultA').innerHTML += `
+  <p>${type} Name: ${name}
+  <button data-text="${name}" onclick="copyText(this)" class="ml-2 bg-yellow-500 px-2 rounded">Copy</button>
+  </p>`;
+}
+
+function stylize(n){
+  return n
+    .replace(/a/gi,'@')
+    .replace(/s/gi,'$')
+    .replace(/o/gi,'0')
+    .replace(/e/gi,'3');
+}
+
+function coolFormat(name){
+  const formats = [
+    name.toUpperCase(),
+    name.split('').join('-'),
+    name.replace(/a/gi,'4'),
+    name.replace(/i/gi,'1'),
+    name + "X",
+    "_"+name+"_",
+    name.split('').join('.')
+  ];
+  return formats[Math.floor(Math.random()*formats.length)];
+}
+
+function countryStyle(name, country){
+  if(country === "UK") return "6ix " + name;
+  if(country === "Indian") return "MC " + name;
+  if(country === "Korean") return name + "-K";
+  if(country === "Latin") return "El " + name;
+  return "Lil " + name;
+}
+
+function getNameVariants(name){
+  const p = ["Lil", "MC", "DJ", "Young", "Prod", "Big"];
+  const s = ["Beats", "Wave", "Flow", "Vibe", "Bass", "Sound"];
+
+  return [
+    `Beats by ${name}`,
+    `${p[Math.floor(Math.random()*p.length)]} ${name}`,
+    `${name} ${s[Math.floor(Math.random()*s.length)]}`,
+    `${stylize(name)} On The Track`,
+    `${name}matic`,
+    `${name}zy`,
+    `${name} X`,
+    `Prod.${stylize(name)}`
+  ];
+}
+
+function generateFromName() {
+  let type = document.getElementById('typeB').value;
+  let raw = document.getElementById('realName').value.trim();
+  let country = document.getElementById('countryB').value;
+  let cool = document.getElementById('coolFormatB').checked;
+
+  if(!raw){
+    document.getElementById('nameError').classList.remove('hidden');
+    document.getElementById('realName').focus();
+    return;
+  }
+
+  document.getElementById('nameError').classList.add('hidden');
+
+  let name = raw.charAt(0).toUpperCase() + raw.slice(1);
+  let variants = getNameVariants(name);
+  let v = variants[Math.floor(Math.random()*variants.length)];
+
+  v = countryStyle(v, country);
+  if(cool) v = coolFormat(v);
+
+  lastGeneratedB = v;
+
+  document.getElementById('resultB').innerHTML += `
+  <p>${type} Name: ${v}
+  <button data-text="${v}" onclick="copyText(this)" class="ml-2 bg-yellow-500 px-2 rounded">Copy</button>
+  </p>`;
+}
+
+function copyText(btn){
+  navigator.clipboard.writeText(btn.dataset.text).then(()=>{
+    showToast("Copied!");
+  });
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.remove('opacity-0','translate-y-4');
+  t.classList.add('opacity-100','translate-y-0');
+  setTimeout(()=>{
+    t.classList.add('opacity-0','translate-y-4');
+    t.classList.remove('opacity-100','translate-y-0');
+  },1500);
+}
+
+function generateTagB(){
+  if(!lastGeneratedB){
+    alert("Generate a name first!");
+    return;
+  }
+  const tags = [
+    `${lastGeneratedB} on the beat!`,
+    `Yo ${lastGeneratedB} run it!`,
+    `${lastGeneratedB} made this!`,
+    `This is ${lastGeneratedB} production!`
+  ];
+  document.getElementById('tagB').innerHTML = tags[Math.floor(Math.random()*tags.length)];
+}
+
+// Hide error when typing
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('realName').addEventListener('input', () => {
+    document.getElementById('nameError').classList.add('hidden');
+  });
+});
+
+// -------- TESTS --------
+function runTests(){
+  console.assert(countryStyle('Akash','UK').includes('6ix'),'UK style');
+  console.assert(typeof coolFormat('Akash')==='string','Cool format string');
+  console.log('All tests passed');
+}
+</script>
+
+  <div id="toast" class="pointer-events-none fixed bottom-6 left-1/2 -translate-x-1/2 bg-black/80 text-white px-4 py-2 rounded-xl shadow-lg opacity-0 translate-y-4 transition-all duration-300"></div>
+</body>
+</html>
