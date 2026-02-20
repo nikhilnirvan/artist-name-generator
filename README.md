@@ -16,6 +16,7 @@ ________________________________________
 ✅ Input Validation (No name = No generation)
 ________________________________________
 🛠 Tech Stack
+
 •	HTML
 •	Tailwind CSS
 •	JavaScript
